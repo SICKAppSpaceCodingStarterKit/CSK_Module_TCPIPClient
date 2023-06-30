@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<manifest>
+    <application name="CSK_Module_TCPIPClient">
+        <crown name="CSK_Module_TCPIPClient">
+            <desc>This is an automatically generated CROWN (description not necessary).</desc>
+        </crown>
+        <crown name="CSK_TCPIPClient">
+            <trait>released</trait>
+            <desc>Module to provide TCP/IP client functionality. Other modules can access its features / settings. +
+This module provides a UI for all relevant features. +
+{empty} + 
+Typically the features of this module are used like this (check also main script of this module): +
+**1) Setup the TCP/IP client configuration** +
+See UI +
+{empty} + 
+**2) Forward content via TCP/IP, also by other modules** +
+To send content via TCP/IP, there are different possibilities. +
+You can make use of sendDataViaTCPIP() to directly send the content with this function. +
+It is also possible to preset the content via setCommand() and after that send the preset content via transmitCommando() (e.g. used within the UI). +
+{empty} + 
+**3) Wait for incomining triggers** +
+It is possible to define trigger commandos to wait for and to forward this on another event, e.g. to another module. +
+This can be done e.g. via addTriggerEventPair('TRG', 'OnNewTrigger'). +
+By doing this, it will notify the TCPIPClient.OnNewTrigger event if a TRG is received on the client. +
+INFO: Events will dynamically created and served. Other modules can check via "Script.isServedAsEvent" if event exists. +
+If there is additional content following the defined trigger command after a ',' it will also be forwarded withint the data content of the event. +
+The same can be done via the UI step by step (see setTrigger(), setEventName(), addTriggerEventPairViaUI() ). +
+{empty} + 
+**4) Listen for incoming content** +
+It is also possible to register on the OnNewDataReceived event by other modules to get the communication content.</desc>
+            <enum name="Communication_Frame" trait="released">
+                <desc>TCP/IP communication frame.</desc>
+                <item desc="No frame." name="empty">empty</item>
+                <item desc="STX / ETX framing." name="STX_ETX">STX-ETX</item>
+            </enum>
+            <serves>
+                <event name="OnNewConnectionStatus">
+                    <desc>Notify configuration setup of TCP/IP connection status.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewServerIP">
+                    <desc>Notify TCP/IP server IP.</desc>
+                    <param desc="IP" multiplicity="1" name="serverIP" type="string"/>
+                </event>
+                <event name="OnNewPort">
+                    <desc>Notify port of TCP/IP connection.</desc>
+                    <param desc="Port" multiplicity="1" name="port" type="int"/>
+                </event>
+                <event name="OnNewLog">
+                    <desc>Notfiy latest log.</desc>
+                    <param desc="Log entries." multiplicity="1" name="log" type="string"/>
+                </event>
+                <event name="OnNewInterface">
+                    <desc>Notify selected interface for TCP/IP connection.</desc>
+                    <param desc="Interface" multiplicity="1" name="interface" type="string"/>
+                </event>
+                <event name="OnNewCurrentConnectionStatus">
+                    <desc>Notify current status of TCP/IP connection.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewCommand">
+                    <desc>Notify command to send.</desc>
+                    <param desc="Command to transmit." multiplicity="1" name="cmd" type="string"/>
+                </event>
+                <event name="OnNewStatusLoadParameterOnReboot">
+                    <desc>Notify status if parameters should be loaded on app/device boot up.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnPersistentDataModuleAvailable">
+                    <desc>Notify status if features of CSK_PersistendData module are available.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewTriggerEventPairList">
+                    <desc>Notify list of trigger/event pairs.</desc>
+                    <param desc="List" multiplicity="1" name="list" type="string"/>
+                </event>
+                <event name="OnNewTestTrigger">
+                    <desc>Internal test event to be notified if test trigger cmd was received ('TRG').</desc>
+                    <param desc="Data content to forward." multiplicity="?" name="data" type="string"/>
+                </event>
+                <event name="OnNewInterfaceList">
+                    <desc>Notify list of available interfaces for TCP/IP connection.</desc>
+                    <param desc="List of interfaces." multiplicity="1" name="list" type="string"/>
+                </event>
+                <event name="OnNewDataReceived">
+                    <desc>Notify received data.</desc>
+                    <param desc="Received data." multiplicity="1" name="data" type="string"/>
+                </event>
+                <event name="OnNewRxFrame">
+                    <desc>Notify RxFrame.</desc>
+                    <param desc="frame" multiplicity="1" name="frame" type="string"/>
+                </event>
+                <event name="OnNewTxFrame">
+                    <desc>Notify TxFrame.</desc>
+                    <param desc="frame" multiplicity="1" name="frame" type="string"/>
+                </event>
+                <event name="OnDataLoadedOnReboot">
+                    <desc>Event to call if module tried to load parameters and should be ready.</desc>
+                </event>
+                <event name="OnUserLevelOperatorActive">
+                    <desc>Status of Operator userlevel. Used internally in combination with the CSK_UserManagement module if available.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnUserLevelMaintenanceActive">
+                    <desc>Status of Maintenance userlevel. Used internally in combination with the CSK_UserManagement module if available.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnUserLevelServiceActive">
+                    <desc>Status of Service userlevel. Used internally in combination with the CSK_UserManagement module if available.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnUserLevelAdminActive">
+                    <desc>Status of Admin userlevel. Used internally in combination with the CSK_UserManagement module if available.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewParameterName">
+                    <desc>Notify name of persistent data parameter.</desc>
+                    <param desc="Parameter name" multiplicity="1" name="name" type="string"/>
+                </event>
+                <function name="startTCPIPClient">
+                    <desc>Start TCP/IP client.</desc>
+                </function>
+                <function name="stopTCPIPClient">
+                    <desc>Stop TCP/IP client.</desc>
+                </function>
+                <function name="sendDataViaTCPIP">
+                    <desc>Transmit data via currently active TCP/IP connection.</desc>
+                    <param desc="Binary string to transmit via TCP/IP." multiplicity="1" name="data" type="string"/>
+                </function>
+                <function name="pageCalled">
+                    <desc>Function to register "OnResume" of the module UI (only as helper function).</desc>
+                    <return desc="Empty string (only needed to simplify binding)." multiplicity="1" name="emptyString" type="string"/>
+                </function>
+                <function name="setServerAddress">
+                    <desc>Set IP of TCP/IP server.</desc>
+                    <param desc="IP" multiplicity="1" name="address" type="string"/>
+                </function>
+                <function name="setPort">
+                    <desc>Set port of TCP/IP connection.</desc>
+                    <param desc="Port" multiplicity="1" name="port" type="int"/>
+                </function>
+                <function name="setCommand">
+                    <desc>Set command to transmit via TCP/IP if triggered via "transmitCommando() (used in modules UI).</desc>
+                    <param desc="Command to transmit." multiplicity="1" name="cmd" type="string"/>
+                </function>
+                <function name="transmitCommando">
+                    <desc>Transmit preset commando via TCP/IP (used in module UI). See also "setCommand".</desc>
+                </function>
+                <function name="setConnectionStatus">
+                    <desc>Set status of TCP/IP connection.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </function>
+                <function name="sendParameters">
+                    <desc>Send parameters to CSK_PersistentData module if possible to save them.</desc>
+                </function>
+                <function name="loadParameters">
+                    <desc>Load parameters for this module from the CSK_PersistentData module if possible and use them.</desc>
+                </function>
+                <function name="setLoadOnReboot">
+                    <desc>Configure if this module should load its saved parameters at app/device boot up.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </function>
+                <function name="setTrigger">
+                    <desc>Set trigger command for trigger/event pair via UI.</desc>
+                    <param desc="Trigger command" multiplicity="1" name="value" type="string"/>
+                </function>
+                <function name="setEventValue">
+                    <desc>Set event for trigger/event pair via UI.</desc>
+                    <param desc="Event to notify." multiplicity="1" name="value" type="string"/>
+                </function>
+                <function name="addTriggerEventPairViaUI">
+                    <desc>Add pair of "trigger" and "event" via UI (parameters are prefilled on UI).</desc>
+                </function>
+                <function name="deleteTriggerEventPairViaUI">
+                    <desc>Remove trigger/event pair selected via modules UI.</desc>
+                </function>
+                <function name="deleteTriggerEventPair">
+                    <desc>Remove trigger/event pair via trigger name.</desc>
+                    <param desc="Trigger command" multiplicity="1" name="trigger" type="string"/>
+                </function>
+                <function name="addTriggerEventPair">
+                    <desc>Add a trigger command to wait for and the related event to call if the trigger command was received.</desc>
+                    <param desc="Trigger to listen on TCP/IP connection." multiplicity="1" name="trigger" type="string"/>
+                    <param desc="Name of event to notify if trigger command was received. +&#10;Prefix 'TCPIPClient.' will be used in front of the string." multiplicity="1" name="event" type="string"/>
+                </function>
+                <function name="selectTriggerEventPairViaUI">
+                    <desc>Select a trigger/event pair via UI.</desc>
+                    <param desc="Selected trigger/event pair." multiplicity="1" name="selection" type="string"/>
+                </function>
+                <function name="setInterface">
+                    <desc>Set interface for the TCP/IP connection.</desc>
+                    <param desc="Interface" multiplicity="1" name="interface" type="string"/>
+                </function>
+                <function name="setRxFraming">
+                    <desc>Set Rx frame of TCP/IP connection (only 'empty' or 'STX-ETX' supported). Will become active with next connection.</desc>
+                    <param desc="Frame to use." multiplicity="1" name="frame" ref="CSK_TCPIPClient.Communication_Frame" type="enum"/>
+                </function>
+                <function name="setTxFraming">
+                    <desc>Set Tx frame of TCP/IP connection (only 'empty' or 'STX-ETX' supported). Will become active with next connection.</desc>
+                    <param desc="Frame to use." multiplicity="1" name="frame" ref="CSK_TCPIPClient.Communication_Frame" type="enum"/>
+                </function>
+                <function name="setParameterName">
+                    <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
+                    <param desc="Parameter name" multiplicity="1" name="name" type="string"/>
+                </function>
+            </serves>
+        </crown>
+        <meta key="author">SICK AG</meta>
+        <meta key="version">3.0.0</meta>
+        <meta key="priority">low</meta>
+        <meta key="copy-protected">false</meta>
+        <meta key="read-protected">false</meta>
+        <meta key="crown2-flow-engine">false</meta>
+        <meta key="LuaLoadAllEngineAPI">false</meta>
+        <entry default="CSK_Module_TCPIPClient.lua" path="scripts"/>
+    </application>
+</manifest>

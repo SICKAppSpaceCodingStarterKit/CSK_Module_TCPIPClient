@@ -1,0 +1,10 @@
+.myCustomFrame_CSK_Module_TCPIPClient {
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+  margin: 6px;
+}
+
+.myCustomMinHeight200px_CSK_Module_TCPIPClient {
+  min-height: 200px;
+}
