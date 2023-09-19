@@ -18,20 +18,29 @@ funcs.json = require('Communication/TCPIPClient/helper/Json')
 --**************************************************************************
 
 --- Function to create a JSON string out of a table content
+---@param list string Type of list
 ---@param content string[] Lua Table with entries for list
 ---@return string jsonstring List created of table entries
-local function createJsonList(content)
+local function createJsonList(list, content)
   local commandList = {}
   if content == nil then
     commandList = {{TriggerCommand = '-', notifyEvent = '-'},}
   else
     local size = 0
       for key, value in pairs(content) do
-        table.insert(commandList, {TriggerCommand = key, notifyEvent = 'CSK_TCPIPClient.' .. value})
+        if list == 'commandList' then
+          table.insert(commandList, {TriggerCommand = key, notifyEvent = 'CSK_TCPIPClient.' .. value})
+        elseif list == 'eventToForward' then
+          table.insert(commandList, {EventToForward = key})
+        end
         size = size + 1
       end
       if size == 0 then
-        commandList = {{TriggerCommand = '-', notifyEvent = '-'},}
+        if list == 'commandList' then
+          commandList = {{TriggerCommand = '-', notifyEvent = '-'},}
+        elseif list == 'eventToForward' then
+          commandList = {{EventToForward = '-'},}
+        end
       end
   end
 

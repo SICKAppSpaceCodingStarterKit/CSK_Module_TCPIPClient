@@ -14,6 +14,10 @@ If directly after the "trigger"-command follows a ',' it can forward following d
 Additionally other modules can also listen to the received messages by registering to event "CSK_TCPIPClient.OnNewDataReceived".  
 For further information check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Module_TCPIPClient/main/docu/CSK_Module_TCPIPClient.html) in the folder "docu".
 
+## Known issues
+
+Data of registered events to be forwarded via TCP/IP are always transmitted as converted data type "string".
+
 ## Information
 
 Tested on:

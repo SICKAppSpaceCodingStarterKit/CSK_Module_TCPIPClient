@@ -278,7 +278,7 @@ e.g. 'OnNewResult' will result in 'CSK_TCPIPClient.OnNewResult'
 								</layout-column>
 							</davinci-collapse>
 						</layout-row>
-						<curie-table id="DT_TriggerCommandLost" selectable
+						<curie-table id="DT_TriggerCommandList" selectable
 							select-mode="highlight_row">
 							<curie-table-column id="TriggerCommand" header="TriggerCommand">
 							</curie-table-column>
@@ -326,6 +326,46 @@ e.g. 'OnNewResult' will result in 'CSK_TCPIPClient.OnNewResult'
 										<span>DELETE</span>
 										<crown-binding event="submit"
 											name="CSK_TCPIPClient/deleteTriggerEventPairViaUI" auto-commit>
+										</crown-binding>
+									</davinci-button>
+								</layout-row>
+							</layout-column>
+						</layout-row>
+						<curie-table id="DT_EventToForward" selectable
+							select-mode="highlight_row">
+							<curie-table-column id="EventToForward" header="EventToForward">
+							</curie-table-column>
+							<crown-edpws-binding property="data"
+								name="CSK_TCPIPClient/OnNewEventToForwardList" update-on-resume>
+							</crown-edpws-binding>
+							<crown-binding event="row-selected"
+								name="CSK_TCPIPClient/selectEventToForwardViaUI"
+								path="param/args/selection" auto-commit>
+							</crown-binding>
+						</curie-table>
+						<layout-row id="RowLayout15"
+							class="myCustomFrame_CSK_Module_TCPIPClient">
+							<layout-column id="ColumnLayout17" style="align-items: stretch">
+								<davinci-text-field id="TF_EventToForward" type="text"
+									label="Event to register:"
+									title="Register to this event to forward its content to TCP/IP server.">
+									<crown-binding event="change" name="CSK_TCPIPClient/setEventToForward"
+										path="param/args/value" auto-commit>
+									</crown-binding>
+								</davinci-text-field>
+								<layout-row id="RowLayout17" style="justify-content: space-between">
+									<davinci-button id="B_AddEventToForward" type="primary"
+										icon-position="append" style="width: 100%">
+										<span>ADD</span>
+										<crown-binding event="submit"
+											name="CSK_TCPIPClient/addEventToForwardViaUI" auto-commit>
+										</crown-binding>
+									</davinci-button>
+									<davinci-button id="B_DeleteEventToForward" type="primary"
+										icon-position="append" style="width: 100%">
+										<span>DELETE</span>
+										<crown-binding event="submit"
+											name="CSK_TCPIPClient/deleteEventToForwardViaUI" auto-commit>
 										</crown-binding>
 									</davinci-button>
 								</layout-row>

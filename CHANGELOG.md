@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Release 3.1.0
+
+### New features
+- Register to events of other modules / apps to forward its content via TCP/IP
+
+### Improvements
+- Update triggerEvents / eventsToForward if parameters were loaded
+- Updated docu and added "Known issues" in README that data of registered events to be forwarded via TCP/IP are always transmitted as converted data type "string"
+
+### Bugfix
+- Did not convert data of registered events to strings before trying to transmit them via TCP/IP
+
 ## Release 3.0.0
 
 ### Improvements
