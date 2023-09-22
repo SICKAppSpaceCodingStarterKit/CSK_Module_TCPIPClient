@@ -47,6 +47,9 @@ tcpIpClient_Model.parameters.connectionStatus = false -- Configure module to try
 -- e.g. "commandList['TRG'] = 'OnNewTrigger' will trigger the event "CSK_TCPIPClient.OnNewTrigger" if receiving 'TRG' via TCPIP connection
 tcpIpClient_Model.parameters.commandList = {}
 
+-- List of events to register to and forward content to TCP/IP server
+tcpIpClient_Model.parameters.forwardEvents = {}
+
 if tcpIpClient_Model.availableInterfaces then
   tcpIpClient_Model.parameters.interface = tcpIpClient_Model.availableInterfaces[1] -- e.g. 'ETH1' -- Select first available ethernet interface per default
 else
@@ -90,9 +93,9 @@ end
 local function sendDataViaTCPIP(data)
   _G.logger:info(nameOfModule .. ": Try to send data...")
   if tcpIpClient_Model.currentConnectionStatus ~= nil then
-    local success = tcpIpClient_Model.tcpIpClient:transmit(data)
+    local success = tcpIpClient_Model.tcpIpClient:transmit(tostring(data))
 
-    table.insert(tcpIpClient_Model.log, 1, DateTime.getTime() .. ' - SENT = ' .. data)
+    table.insert(tcpIpClient_Model.log, 1, DateTime.getTime() .. ' - SENT = ' .. tostring(data))
     if #tcpIpClient_Model.log == 100 then
       table.remove(tcpIpClient_Model.log, 100)
     end
@@ -101,7 +104,7 @@ local function sendDataViaTCPIP(data)
     if success == 0 then
       _G.logger:info(nameOfModule .. ": TCP Data Out failed")
     else
-      _G.logger:info(nameOfModule .. ": Send: " .. data)
+      _G.logger:info(nameOfModule .. ": Send: " .. tostring(data))
     end
   else
     _G.logger:info(nameOfModule .. ": No TCP connection.")

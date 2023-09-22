@@ -18,6 +18,9 @@ tmrTCPIPClient:setPeriodic(false)
 local triggerValue, eventValue -- Selected trigger command + eventName for trigger/event pair via UI
 local selectedTrigger = '' -- Selected trigger/event pair
 
+local eventToForward = '' -- Preset event name to add via UI (see 'addEventToForwardViaUI')
+local selectedEventToForward = '' -- Selected event to forward content to TCP/IP server within UI table
+
 -- Reference to global handle
 local tcpIpClient_Model
 
@@ -34,6 +37,7 @@ Script.serveEvent("CSK_TCPIPClient.OnNewCurrentConnectionStatus", "TCPIPClient_O
 Script.serveEvent("CSK_TCPIPClient.OnNewCommand", "TCPIPClient_OnNewCommand")
 Script.serveEvent("CSK_TCPIPClient.OnNewLog", "TCPIPClient_OnNewLog")
 Script.serveEvent("CSK_TCPIPClient.OnNewTriggerEventPairList", "TCPIPClient_OnNewTriggerEventPairList")
+Script.serveEvent("CSK_TCPIPClient.OnNewEventToForwardList", "TCPIPClient_OnNewEventToForwardList")
 
 Script.serveEvent("CSK_TCPIPClient.OnUserLevelOperatorActive", "TCPIPClient_OnUserLevelOperatorActive")
 Script.serveEvent("CSK_TCPIPClient.OnUserLevelMaintenanceActive", "TCPIPClient_OnUserLevelMaintenanceActive")
@@ -128,7 +132,8 @@ local function handleOnExpiredTmrTCPIPClient()
   Script.notifyEvent("TCPIPClient_OnPersistentDataModuleAvailable", tcpIpClient_Model.persistentModuleAvailable)
   Script.notifyEvent("TCPIPClient_OnNewParameterName", tcpIpClient_Model.parametersName)
   tcpIpClient_Model.sendLog()
-  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList(tcpIpClient_Model.parameters.commandList))
+  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList('commandList', tcpIpClient_Model.parameters.commandList))
+  Script.notifyEvent("TCPIPClient_OnNewEventToForwardList", tcpIpClient_Model.helperFuncs.createJsonList('eventToForward', tcpIpClient_Model.parameters.forwardEvents))
 
 end
 Timer.register(tmrTCPIPClient, "OnExpired", handleOnExpiredTmrTCPIPClient)
@@ -141,6 +146,67 @@ local function pageCalled()
   return ''
 end
 Script.serveFunction("CSK_TCPIPClient.pageCalled", pageCalled)
+
+local function selectEventToForwardViaUI(selection)
+
+  if selection == "" then
+    selectedEventToForward = ''
+    _G.logger:info(nameOfModule .. ": Did not find EventToForward. Is empty")
+  else
+    local _, pos = string.find(selection, '"EventToForward":"')
+    if pos == nil then
+      _G.logger:info(nameOfModule .. ": Did not find EventToForward. Is nil")
+      selectedEventToForward = ''
+    else
+      pos = tonumber(pos)
+      local endPos = string.find(selection, '"', pos+1)
+      selectedEventToForward = string.sub(selection, pos+1, endPos-1)
+      if ( selectedEventToForward == nil or selectedEventToForward == "" ) then
+        _G.logger:info(nameOfModule .. ": Did not find EventToForward. Is empty or nil")
+        selectedEventToForward = ''
+      else
+        _G.logger:info(nameOfModule .. ": Selected EventToForward: " .. tostring(selectedEventToForward))
+      end
+    end
+  end
+end
+Script.serveFunction("CSK_TCPIPClient.selectEventToForwardViaUI", selectEventToForwardViaUI)
+
+local function addEventToForward(event)
+  tcpIpClient_Model.parameters.forwardEvents[event] = event
+  local suc = Script.register(event, tcpIpClient_Model.sendDataViaTCPIP)
+  _G.logger:info(nameOfModule .. ": Added event to forward content = " .. event)
+  _G.logger:info(nameOfModule .. ": Success to register to event = " .. tostring(suc))
+  Script.notifyEvent("TCPIPClient_OnNewEventToForwardList", tcpIpClient_Model.helperFuncs.createJsonList('eventToForward', tcpIpClient_Model.parameters.forwardEvents))
+end
+Script.serveFunction("CSK_TCPIPClient.addEventToForward", addEventToForward)
+
+local function addEventToForwardViaUI()
+  addEventToForward(eventToForward)
+end
+Script.serveFunction("CSK_TCPIPClient.addEventToForwardViaUI", addEventToForwardViaUI)
+
+local function deleteEventToForward(event)
+  tcpIpClient_Model.parameters.forwardEvents[event] = nil
+  local suc = Script.deregister(event, tcpIpClient_Model.sendDataViaTCPIP)
+  _G.logger:info(nameOfModule .. ": Deleted event = " .. tostring(event))  
+  _G.logger:info(nameOfModule .. ": Success to deregister of event = " .. tostring(suc))
+  Script.notifyEvent("TCPIPClient_OnNewEventToForwardList", tcpIpClient_Model.helperFuncs.createJsonList('eventToForward', tcpIpClient_Model.parameters.forwardEvents))
+end
+Script.serveFunction("CSK_TCPIPClient.deleteEventToForward", deleteEventToForward)
+
+local function deleteEventToForwardViaUI()
+  if selectedEventToForward ~= '' then
+    deleteEventToForward(selectedEventToForward)
+  end
+end
+Script.serveFunction("CSK_TCPIPClient.deleteEventToForwardViaUI", deleteEventToForwardViaUI)
+
+local function setEventToForward(value)
+  eventToForward = value
+  _G.logger:info(nameOfModule .. ": Set eventToForward = " .. tostring(value))
+end
+Script.serveFunction("CSK_TCPIPClient.setEventToForward", setEventToForward)
 
 local function selectTriggerEventPairViaUI(selection)
 
@@ -170,19 +236,18 @@ Script.serveFunction("CSK_TCPIPClient.selectTriggerEventPairViaUI", selectTrigge
 local function addTriggerEventPair(trigger, event)
   tcpIpClient_Model.parameters.commandList[trigger] = event
   _G.logger:info(nameOfModule .. ": Added Trigger/Event pair = " .. trigger .. '/' .. event)
-  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList(tcpIpClient_Model.parameters.commandList))
+  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList('commandList', tcpIpClient_Model.parameters.commandList))
 
   local check = Script.isServedAsEvent("CSK_TCPIPClient." .. event)
   if not check then
     Script.serveEvent("CSK_TCPIPClient." .. event, "TCPIPClient_" .. event, 'string:?')
   end
-
 end
 Script.serveFunction("CSK_TCPIPClient.addTriggerEventPair", addTriggerEventPair)
 
 local function deleteTriggerEventPair(trigger)
   tcpIpClient_Model.parameters.commandList[trigger] = nil
-  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList(tcpIpClient_Model.parameters.commandList))
+  Script.notifyEvent("TCPIPClient_OnNewTriggerEventPairList", tcpIpClient_Model.helperFuncs.createJsonList('commandList', tcpIpClient_Model.parameters.commandList))
   _G.logger:info(nameOfModule .. ": Deleted trigger = " .. tostring(trigger))
 end
 Script.serveFunction("CSK_TCPIPClient.deleteTriggerEventPair", deleteTriggerEventPair)
@@ -303,6 +368,15 @@ local function loadParameters()
       if tcpIpClient_Model.parameters.connectionStatus then
         tcpIpClient_Model.startTCPIPClient()
       end
+
+      for forwardEvent in pairs(tcpIpClient_Model.parameters.forwardEvents) do
+        addEventToForward(forwardEvent)
+      end
+
+      for trigger, event in pairs(tcpIpClient_Model.parameters.commandList) do
+        addTriggerEventPair(trigger, event)
+      end
+
       CSK_TCPIPClient.pageCalled()
     else
       _G.logger:warning(nameOfModule .. ": Loading parameters from CSK_PersistentData module did not work.")
