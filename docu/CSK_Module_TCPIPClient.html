@@ -619,7 +619,7 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 <div class="details">
 <span id="author" class="author">SICK AG</span><br>
 <span id="revnumber">version 3.1.0,</span>
-<span id="revdate">2023-09-19</span>
+<span id="revdate">2023-09-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -727,7 +727,7 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock">Date</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2023-09-19</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2023-09-22</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock">Author</p></th>
@@ -785,15 +785,15 @@ It is also possible to preset the content via setCommand() and after that send t
 <br>
 Additionally it is possible to configure the module to listen / wait for specific events of other modules/apps and to forward their content via TCP/IP.<br>
 This can be used e.g. to listen to "OtherModule.OnNewResult"-events and to forward the results via TCP/IP (data will be converted to data type 'string').<br>
-To do so make use of "addEventToForward" (via script) or "addEventToForwardViaUI" (event needs to be preset via"setEventToForward").<br>
+To do so make use of "addEventToForward" (via script) or "addEventToForwardViaUI" (event needs to be preset via "setEventToForward").<br>
 <br>
-<strong>3) Wait for incomining triggers</strong><br>
+<strong>3) Wait for incoming triggers</strong><br>
 It is possible to define trigger commandos to wait for and to forward this on another event, e.g. to another module.<br>
 This can be done e.g. via addTriggerEventPair('TRG', 'OnNewTrigger').<br>
 By doing this, it will notify the TCPIPClient.OnNewTrigger event if a TRG is received on the client.<br>
 INFO: Events will dynamically created and served. Other modules can check via "Script.isServedAsEvent" if event exists.<br>
 If there is additional content following the defined trigger command after a ',' it will also be forwarded withint the data content of the event.<br>
-The same can be done via the UI step by step (see setTrigger(), setEventName(), addTriggerEventPairViaUI() ).<br>
+The same can be done via the UI step by step (see setTrigger(), setEventName(), or addTriggerEventPairViaUI()).<br>
 <br>
 <strong>4) Listen for incoming content</strong><br>
 It is also possible to register on the 'OnNewDataReceived' event by other modules to get the communication content.</p>
@@ -966,7 +966,7 @@ It is also possible to register on the 'OnNewDataReceived' event by other module
 <div class="sect5">
 <h6 id="_short_description_3">Short description</h6>
 <div class="paragraph">
-<p>Add a event to register to and to forward content (as string) to TCP/IP server.</p>
+<p>Add an event to register to and to forward the content of its first parameter (as string) to TCP/IP server.</p>
 </div>
 </div>
 <div class="sect5">
@@ -1010,7 +1010,7 @@ It is also possible to register on the 'OnNewDataReceived' event by other module
 <div class="sect5">
 <h6 id="_short_description_4">Short description</h6>
 <div class="paragraph">
-<p>Add event to register to and forward content (as string) to TCPI/IP server via UI (event needs to be prefilled on UI).</p>
+<p>Add event to register to and forward content (first event parameter as string) to TCPI/IP server via UI (event needs to be prefilled on UI / via "setEventToForward").</p>
 </div>
 </div>
 <div class="sect5">
@@ -1278,7 +1278,7 @@ Prefix 'TCPIPClient.' will be used in front of the string.</p></td>
 <div class="sect5">
 <h6 id="_short_description_13">Short description</h6>
 <div class="paragraph">
-<p>Select a event to forward content to TCP/IP server via UI.</p>
+<p>Select an event to forward the content of its first parameter to TCP/IP server via UI.</p>
 </div>
 </div>
 <div class="sect5">
@@ -3095,7 +3095,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div id="footer">
 <div id="footer-text">
 Version 3.1.0<br>
-Last updated 2023-09-19 13:26:46 +0200
+Last updated 2023-09-22 12:51:44 +0200
 </div>
 </div>
 <script type="text/javascript">

@@ -20,15 +20,15 @@ It is also possible to preset the content via setCommand() and after that send t
 {empty} + 
 Additionally it is possible to configure the module to listen / wait for specific events of other modules/apps and to forward their content via TCP/IP. +
 This can be used e.g. to listen to "OtherModule.OnNewResult"-events and to forward the results via TCP/IP (data will be converted to data type 'string'). +
-To do so make use of "addEventToForward" (via script) or "addEventToForwardViaUI" (event needs to be preset via"setEventToForward"). +
+To do so make use of "addEventToForward" (via script) or "addEventToForwardViaUI" (event needs to be preset via "setEventToForward"). +
 {empty} + 
-**3) Wait for incomining triggers** +
+**3) Wait for incoming triggers** +
 It is possible to define trigger commandos to wait for and to forward this on another event, e.g. to another module. +
 This can be done e.g. via addTriggerEventPair('TRG', 'OnNewTrigger'). +
 By doing this, it will notify the TCPIPClient.OnNewTrigger event if a TRG is received on the client. +
 INFO: Events will dynamically created and served. Other modules can check via "Script.isServedAsEvent" if event exists. +
 If there is additional content following the defined trigger command after a ',' it will also be forwarded withint the data content of the event. +
-The same can be done via the UI step by step (see setTrigger(), setEventName(), addTriggerEventPairViaUI() ). +
+The same can be done via the UI step by step (see setTrigger(), setEventName(), or addTriggerEventPairViaUI()). +
 {empty} + 
 **4) Listen for incoming content** +
 It is also possible to register on the 'OnNewDataReceived' event by other modules to get the communication content.</desc>
@@ -212,15 +212,15 @@ It is also possible to register on the 'OnNewDataReceived' event by other module
                     <param desc="Parameter name" multiplicity="1" name="name" type="string"/>
                 </function>
                 <function name="selectEventToForwardViaUI">
-                    <desc>Select a event to forward content to TCP/IP server via UI.</desc>
+                    <desc>Select an event to forward the content of its first parameter to TCP/IP server via UI.</desc>
                     <param desc="Selected event." multiplicity="1" name="selection" type="string"/>
                 </function>
                 <function name="addEventToForward">
-                    <desc>Add a event to register to and to forward content (as string) to TCP/IP server.</desc>
+                    <desc>Add an event to register to and to forward the content of its first parameter (as string) to TCP/IP server.</desc>
                     <param desc="Name of event to register to." multiplicity="1" name="event" type="string"/>
                 </function>
                 <function name="addEventToForwardViaUI">
-                    <desc>Add event to register to and forward content (as string) to TCPI/IP server via UI (event needs to be prefilled on UI).</desc>
+                    <desc>Add event to register to and forward content (first event parameter as string) to TCPI/IP server via UI (event needs to be prefilled on UI / via "setEventToForward").</desc>
                 </function>
                 <function name="deleteEventToForward">
                     <desc>Remove event to forward content.</desc>

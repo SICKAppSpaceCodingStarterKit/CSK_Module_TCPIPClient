@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Release 3.1.0
 
 ### New features
-- Register to events of other modules / apps to forward its content via TCP/IP
+- Register to events of other modules/apps to forward its content (first parameter) via TCP/IP (see "addEventToForward")
 
 ### Improvements
 - Update triggerEvents / eventsToForward if parameters were loaded
