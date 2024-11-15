@@ -1,5 +1,7 @@
 # CSK_Module_TCPIPClient
 
+***IMPORTANT***: DEPRECATED. See: https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_MultiTCPIPClient
+
 Module to provide TCP/IP client configuration
 
 ![](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_TCPIPClient/blob/main/docu/media/UI_Screenshot.png)
